@@ -1,0 +1,413 @@
+<div class="container">
+    <h3>{{ 'PLACE.TITLEFORSOME' | translate }} <button class="btn btn-danger" 
+      *ngIf="livingPlace.requiredLivingSpaceResponse.enoughSpace === false" 
+      (click)="openLPWarningModal(livingPlace)">!</button></h3> 
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ livingPlace.name }}</h5>
+        <h6 class="card-text">{{ 'PLACE.LOCATION' | translate }}: {{ livingPlace.location }}</h6>
+        <p class="card-text">{{ livingPlace.description }}</p>
+        <h6 class="card-text">{{ 'PLACE.TEMPR' | translate }}: {{ livingPlace.temperature }} </h6>
+        <h6 class="card-text">{{ 'PLACE.HUM' | translate }}: {{ livingPlace.humidity }} </h6>
+        <h6 class="card-text">{{ 'PLACE.UPDATETIME' | translate }} {{ livingPlace.thUpdateDate }}</h6>
+        <h6 class="card-text">{{ 'PLACE.VOLUME' | translate }}: {{ livingPlace.livingSpace }}</h6>
+        <button class="btn btn-primary" (click)="confirmEdit()">{{ 'BUTTON.EDIT' | translate }}</button>
+        <button class="btn btn-danger" (click)="confirmDelete()">{{ 'BUTTON.DELETE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmLPWarnModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">{{ 'WARNING.TITLE' | translate }}</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="canceLPWarningModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group" *ngIf="livingPlace.requiredLivingSpaceResponse.enoughSpace === false">
+                <h5 class="modal-title">{{ 'WARNING.NOTENOUGHVOLUME.TITLE' | translate }}</h5>
+                <label for="insectCount">{{ 'WARNING.NOTENOUGHVOLUME.REQUIREDVOLUME' | translate }}: {{livingPlace.requiredLivingSpaceResponse.sumVolumeForInsects}}</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="canceLPWarningModal()">{{ 'BUTTON.OK' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmDeleteModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.DELETE.DEFAULT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelDelete()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ 'ACTION.DELETE.PLACE' | translate }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelDelete()">{{ 'BUTTON.CANCEL' | translate }}</button>
+          <button type="button" class="btn btn-danger" (click)="deleteLivingPlace()">{{ 'BUTTON.OK' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmEditModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.EDIT.PLACE' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelEdit()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+              <div class="form-group">
+                <label for="livingPlaceName">{{ 'PLACE.NAME' | translate }}:</label>
+                <input type="text" class="form-control" id="livingPlaceName" [(ngModel)]="livingPlace.name">
+              </div>
+              <div class="form-group">
+                  <label for="livingPlaceLocation">{{ 'PLACE.LOCATION' | translate }}:</label>
+                  <input type="text" class="form-control" id="livingPlaceLocation" [(ngModel)]="livingPlace.location">
+                </div>
+              <div class="form-group">
+                <label for="livingPlaceLivingSpace">{{ 'PLACE.VOLUME' | translate }}</label>
+                <input type="number" class="form-control" id="livingPlaceLivingSpace" [(ngModel)]="livingPlace.livingSpace">
+              </div>
+              <div class="form-group">
+                  <label for="livingPlaceDescription">{{ 'PLACE.DESCRIPTION' | translate }}:</label>
+                  <textarea class="form-control" id="livingPlaceDescription" [(ngModel)]="livingPlace.description"></textarea>
+            </div>          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="editLivingPlace()">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelEdit()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="container">
+    <h2>{{ 'PLACEINSECT.TITLE' | translate }}</h2>
+    <button class="btn btn-primary" (click)="openAddLivingPlaceInsectPopup()">{{ 'BUTTON.ADD' | translate }}</button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ 'PLACEINSECT.NAME' | translate }}</th>
+          <th>{{ 'PLACEINSECT.INSECTCOUNT' | translate }}</th>
+          <th>{{ 'PLACEINSECT.SATTLEMENTTIME' | translate }}</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let livingPlaceInsect of livingPlaceInsects 
+        | paginate: { itemsPerPage: itemsPerPageLPI, currentPage: currentPageLPI }" >
+          <td [routerLink]="['/insect', livingPlaceInsect.insectId]">{{ livingPlaceInsect.insectName }}</td>
+          <td [routerLink]="['/insect', livingPlaceInsect.insectId]">{{ livingPlaceInsect.insectCount }}</td>
+          <td [routerLink]="['/insect', livingPlaceInsect.insectId]">{{ livingPlaceInsect.settlementDate }}</td>
+          <td><button class="btn btn-primary" (click)="confirmLPIEdit(livingPlaceInsect.livingPlaseId, livingPlaceInsect.insectId)">{{ 'BUTTON.EDIT' | translate }}</button></td>
+          <td><button class="btn btn-danger" (click)="confirmLPIDelete(livingPlaceInsect.livingPlaseId, livingPlaceInsect.insectId)">{{ 'BUTTON.DELETE' | translate }}</button></td>
+          <td><button class="btn btn-danger" 
+            *ngIf="livingPlaceInsect.requiredTemperatureResponse.temperatureIsFine === false 
+            || livingPlaceInsect.requiredHumidityResponse.humidityIsFine === false 
+            || livingPlaceInsect.timeOfResidenceResponse.timeIsNotUp === false 
+            || livingPlaceInsect.requiredFoddersExistenceResponse.neededFoddersAreExisted === false" 
+            (click)="openLPIWarningModal(livingPlaceInsect)">!</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="currentPageLPI = $event"></pagination-controls>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmLPIWarnModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">{{ 'WARNING.TITLE' | translate }}</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="canceLPIWarningModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group" *ngIf="livingPlaceInsect.requiredTemperatureResponse.temperatureIsFine === false">
+                <h5 class="modal-title">{{ 'WARNING.INAPPROPRIATETEMPR.TITLE' | translate }}</h5>
+                <label for="insectCount">{{ 'WARNING.INAPPROPRIATETEMPR.REQUIREDTEMPR' | translate }}: {{livingPlaceInsect.requiredTemperatureResponse.minRequiredTemperature}} - {{livingPlaceInsect.requiredTemperatureResponse.maxRequiredTemperature}}.   </label>
+                <label for="insectCount">{{ 'WARNING.INAPPROPRIATETEMPR.CURTEMPR' | translate }}: {{livingPlaceInsect.requiredTemperatureResponse.currentTemperature}}</label>
+            </div>
+            <div class="form-group" *ngIf="livingPlaceInsect.requiredHumidityResponse.humidityIsFine === false">
+                <h5 class="modal-title">{{ 'WARNING.INAPPROPRIATEHUM.TITLE' | translate }}</h5>
+                <label for="insectCount">{{ 'WARNING.INAPPROPRIATEHUM.REQUIREDHUM' | translate }}: {{livingPlaceInsect.requiredHumidityResponse.minRequiredHumidity}} - {{livingPlaceInsect.requiredHumidityResponse.maxRequiredHumidity}}.   </label>
+                <label for="insectCount">{{ 'WARNING.INAPPROPRIATEHUM.CURHUM' | translate }}: {{livingPlaceInsect.requiredHumidityResponse.currentHumidity}}</label>
+            </div>
+            <div class="form-group" *ngIf="livingPlaceInsect.timeOfResidenceResponse.timeIsNotUp === false">
+                <h5 class="modal-title">{{ 'WARNING.LIVINGTIMEISUP.TITLE' | translate }}</h5>
+                <label for="insectCount">{{ 'WARNING.LIVINGTIMEISUP.ACTUALTERM' | translate }}: {{livingPlaceInsect.timeOfResidenceResponse.timeOfResidence}}   {{ 'WARNING.LIVINGTIMEISUP.DAY' | translate }}</label>
+                <label for="insectCount">{{ 'WARNING.LIVINGTIMEISUP.REQUIREDTERM' | translate }}: {{livingPlaceInsect.timeOfResidenceResponse.lifeSpan}} {{ 'WARNING.LIVINGTIMEISUP.DAY' | translate }}</label>
+            </div>
+            <div class="form-group" *ngIf="livingPlaceInsect.requiredFoddersExistenceResponse.neededFoddersAreExisted === false">
+                <h5 class="modal-title">{{ 'WARNING.INAPPROPRIATEFODDERS.TITLE' | translate }}</h5>
+                    <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'WARNING.INAPPROPRIATEFODDERS.FODDER' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  *ngFor="let fodderNeededForInsect of livingPlaceInsect.requiredFoddersExistenceResponse.foddersNeededForInsect">
+                            <td [routerLink]="['/fodder', fodderNeededForInsect.fodderId]">{{fodderNeededForInsect.fodderName}}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="canceLPIWarningModal()">{{ 'BUTTON.OK' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': showAddLivingPlaceInsectPopup }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'BUTTON.ADD' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeAddLivingPlaceInsectPopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="insectName">{{ 'PLACEINSECT.NAME' | translate }}:</label>
+              <select class="form-control" id="insectName" [(ngModel)]="newLivingPlaceInsect.insectId">
+                <option *ngFor="let insect of insects" [value]="insect.id">{{ insect.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="insectCount">{{ 'PLACEINSECT.INSECTCOUNT' | translate }}:</label>
+              <input type="number" class="form-control" id="insectCount" [(ngModel)]="newLivingPlaceInsect.insectCount">
+            </div>
+            <div class="form-group">
+                <label for="settlementDate">{{ 'PLACEINSECT.SATTLEMENTTIME' | translate }}:</label>
+                <input type="datetime-local" class="form-control" id="settlementDate" [(ngModel)]="newLivingPlaceInsect.settlementDate">
+            </div>
+          </div>          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addLivingPlaceInsect()">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeAddLivingPlaceInsectPopup()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmLPIDeleteModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.DELETE.DEFAULT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelLPIDelete()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ 'ACTION.DELETE.PLACEINSECT' | translate }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelLPIDelete()">{{ 'BUTTON.CANCEL' | translate }}</button>
+          <button type="button" class="btn btn-danger" (click)="deleteLivingPlaceInsect(livingPlaceInsect.livingPlaseId, livingPlaceInsect.insectId)">{{ 'BUTTON.OK' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmLPIEditModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.EDIT.PLACEINSECT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelLPIEdit()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="insectCount">{{ 'PLACEINSECT.INSECTCOUNT' | translate }}:</label>
+                <input type="number" class="form-control" id="insectCount" [(ngModel)]="livingPlaceInsect.insectCount">
+              </div>
+              <div class="form-group">
+                  <label for="settlementDate">{{ 'PLACEINSECT.SATTLEMENTTIME' | translate }}:</label>
+                  <input type="datetime-local" class="form-control" id="settlementDate" [(ngModel)]="livingPlaceInsect.settlementDate">
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="editLivingPlaceInsect(livingPlaceInsect.livingPlaseId, livingPlaceInsect.insectId)">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelLPIEdit()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="container">
+    <h2>{{ 'PLACEFODDER.TITLE' | translate }}</h2>
+    <button class="btn btn-primary" (click)="openAddLivingPlaceFodderPopup()">{{ 'BUTTON.ADD' | translate }}</button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ 'PLACEFODDER.NAME' | translate }}</th>
+          <th>{{ 'PLACEFODDER.FODDERCOUNT' | translate }}</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let livingPlaceFodder of livingPlaceFodders 
+        | paginate: { itemsPerPage: itemsPerPageLPF, currentPage: currentPageLPF }" >
+          <td [routerLink]="['/fodder', livingPlaceFodder.fodderId]">{{ livingPlaceFodder.fodderName }}</td>
+          <td [routerLink]="['/fodder', livingPlaceFodder.fodderId]">{{ livingPlaceFodder.fodderVolume }}</td>
+          <td><button class="btn btn-primary" (click)="confirmLPFEdit(livingPlaceFodder.livingPlaseId, livingPlaceFodder.fodderId)">{{ 'BUTTON.EDIT' | translate }}</button></td>
+          <td><button class="btn btn-danger" (click)="confirmLPFDelete(livingPlaceFodder.livingPlaseId, livingPlaceFodder.fodderId)">{{ 'BUTTON.DELETE' | translate }}</button></td>
+          <td><button class="btn btn-danger" 
+            *ngIf="livingPlaceFodder.fodderEnoughVolumeResponse.fodderVolumeIsEnough === false" 
+            (click)="openLPFWarningModal(livingPlaceFodder)">!</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="currentPageLPF = $event"></pagination-controls>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmLPFWarnModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">{{ 'WARNING.TITLE' | translate }}</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="canceLPFWarningModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group" *ngIf="livingPlaceFodder.fodderEnoughVolumeResponse.fodderVolumeIsEnough === false">
+                <h5 class="modal-title">{{ 'WARNING.NOTENOUGHFODDER.TITLE' | translate }}</h5>
+                <label for="insectCount">{{ 'WARNING.NOTENOUGHFODDER.CONSAMPTIONVOLUME' | translate }}: {{livingPlaceFodder.fodderEnoughVolumeResponse.consumptionVolumeForInsects}}</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="canceLPFWarningModal()">{{ 'BUTTON.OK' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': showAddLivingPlaceFodderPopup }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'BUTTON.ADD' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeAddLivingPlaceFodderPopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="insectName">{{ 'PLACEFODDER.NAME' | translate }}:</label>
+              <select class="form-control" id="insectName" [(ngModel)]="newLivingPlaceFodder.fodderId">
+                <option *ngFor="let fodder of fodders" [value]="fodder.id">{{ fodder.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="lifeSpan">{{ 'PLACEFODDER.FODDERCOUNT' | translate }}:</label>
+              <input type="number" class="form-control" id="lifeSpan" [(ngModel)]="newLivingPlaceFodder.fodderVolume">
+            </div>
+          </div>          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addLivingPlaceFodder()">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeAddLivingPlaceFodderPopup()">{{ 'BUTTON.COUNT' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmLPFDeleteModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.DELETE.DEFAULT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelLPFDelete()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ 'ACTION.DELETE.PLACEFODDER' | translate }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelLPFDelete()">{{ 'BUTTON.CANCEL' | translate }}</button>
+          <button type="button" class="btn btn-danger" (click)="deleteLivingPlaceFodder(livingPlaceFodder.livingPlaseId, livingPlaceFodder.fodderId)">{{ 'BUTTON.OK' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmLPFEditModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.EDIT.PLACEFODDER' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelLPFEdit()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+              <div class="form-group">
+                <label for="fodderVolume">{{ 'PLACEFODDER.FODDERCOUNT' | translate }}:</label>
+                <input type="number" class="form-control" id="fodderVolume" [(ngModel)]="livingPlaceFodder.fodderVolume">
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="editLivingPlaceFodder(livingPlaceFodder.livingPlaseId, livingPlaceFodder.fodderId)">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelLPFEdit()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="alert alert-info">
+      <h3>
+        Підключення датчику температури та вологості.
+      </h3>
+      <p>
+        Ввімкніть пристрій та під'єднатися до WIFI мережі за даними:
+      </p>
+      <p>
+        Назва мережі: Lab3
+      </p>
+      <p>
+        Пароль: 123456lab78
+      </p>
+      <p>
+        Заповніть <a href="http://192.168.4.1">цю форму</a> після того як під'єднаєтесь до мережі.
+      </p>
+      <p>
+        SSID: назва вашої WIFI мережі з доступом в інтернет
+      </p>
+      <p>
+        Password: пароль від цієї мережі
+      </p>
+      <p>
+        API Key: {{livingPlaceId}}
+      </p>
+    </div>
+  </div>

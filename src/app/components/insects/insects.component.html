@@ -1,0 +1,81 @@
+<div class="container">
+    <h2>{{ 'INSECT.TITLEFORMANY' | translate }}</h2>
+    <button class="btn btn-primary" (click)="openAddInsectPopup()">{{ 'BUTTON.ADD' | translate }}</button>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ 'INSECT.NAME' | translate }}</th>
+          <th>{{ 'INSECT.TEMPR' | translate }}</th>
+          <th>{{ 'INSECT.HUM' | translate }}</th>
+          <th>{{ 'INSECT.LIVINGSPACE' | translate }}</th>
+          <th>{{ 'INSECT.LIFESPAN' | translate }}</th>
+          <th>{{ 'INSECT.DESCRIPTION' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let insect of insects 
+        | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" 
+        [routerLink]="['/insect', insect.id]">
+          <td>{{ insect.name }}</td>
+          <td>{{ insect.minTemperature }} - {{ insect.maxTemperature }}</td>
+          <td>{{ insect.minHumidity }} - {{ insect.maxHumidity }}</td>
+          <td>{{ insect.minLivingSpace }}</td>
+          <td>{{ insect.lifeSpan }}</td>
+          <td>{{ insect.description.length > 50 ? (insect.description | slice:0:50) + '...' : insect.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': showAddInsectPopup }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.ADD.INSECT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeAddInsectPopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>{{ '' | translate }}
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="insectName">{{ 'INSECT.NAME' | translate }}:</label>
+              <input type="text" class="form-control" id="insectName" [(ngModel)]="newInsect.name">
+            </div>
+            <div class="form-group">
+              <label for="minTemperature">{{ 'INSECT.MINTEMPR' | translate }}:</label>
+              <input type="number" class="form-control" id="minTemperature" [(ngModel)]="newInsect.minTemperature">
+            </div>
+            <div class="form-group">
+              <label for="maxTemperature">{{ 'INSECT.MAXTEMPR' | translate }}:</label>
+              <input type="number" class="form-control" id="maxTemperature" [(ngModel)]="newInsect.maxTemperature">
+            </div>
+            <div class="form-group">
+              <label for="minHumidity">{{ 'INSECT.MINHUM' | translate }}:</label>
+              <input type="number" class="form-control" id="minHumidity" [(ngModel)]="newInsect.minHumidity">
+            </div>
+            <div class="form-group">
+              <label for="maxHumidity">{{ 'INSECT.MAXHUM' | translate }}:</label>
+              <input type="number" class="form-control" id="maxHumidity" [(ngModel)]="newInsect.maxHumidity">
+            </div>
+            <div class="form-group">
+              <label for="minLivingSpace">{{ 'INSECT.LIVINGSPACE' | translate }}:</label>
+              <input type="number" class="form-control" id="minLivingSpace" [(ngModel)]="newInsect.minLivingSpace">
+            </div>
+            <div class="form-group">
+              <label for="lifeSpan">{{ 'INSECT.LIFESPAN' | translate }}:</label>
+              <input type="number" class="form-control" id="lifeSpan" [(ngModel)]="newInsect.lifeSpan">
+            </div>
+            <div class="form-group">
+                <label for="insectDescription">{{ 'INSECT.DESCRIPTION' | translate }}:</label>
+                <textarea class="form-control" id="insectDescription" [(ngModel)]="newInsect.description"></textarea>
+              </div>
+          </div>          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addInsect()">{{ 'INSECT.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeAddInsectPopup()">{{ 'INSECT.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>

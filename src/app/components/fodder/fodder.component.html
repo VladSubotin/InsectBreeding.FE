@@ -1,0 +1,59 @@
+<div class="container">
+    <h3>{{ 'FODDER.TITLEFORSOME' | translate }}</h3>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ fodder.name }}</h5>
+        <p class="card-text">{{ fodder.description }}</p>
+        <button class="btn btn-primary" (click)="confirmEdit()">{{ 'BUTTON.EDIT' | translate }}</button>
+        <button class="btn btn-danger" (click)="confirmDelete()">{{ 'BUTTON.DELETE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmDeleteModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.DELETE.DEFAULT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelDelete()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ 'ACTION.DELETE.FODDER' | translate }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelDelete()">{{ 'BUTTON.CANCEL' | translate }}</button>
+          <button type="button" class="btn btn-danger" (click)="deleteFodder()">{{ 'BUTTON.OK' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmEditModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.EDIT.FODDER' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelEdit()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="foodName">{{ 'FODDER.NAME' | translate }}:</label>
+            <input type="text" class="form-control" id="foodName" [(ngModel)]="fodder.name">
+          </div>
+          <div class="form-group">
+            <label for="foodDescription">{{ 'FODDER.DESCRIPTION' | translate }}:</label>
+            <textarea class="form-control" id="foodDescription" [(ngModel)]="fodder.description"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="editFodder()">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelEdit()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

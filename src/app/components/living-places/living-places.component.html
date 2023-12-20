@@ -1,0 +1,59 @@
+<div class="container">
+    <h2>{{ 'PLACE.TITLEFORMANY' | translate }}</h2>
+    <button class="btn btn-primary" (click)="openAddLivingPlacePopup()">{{ 'BUTTON.ADD' | translate }}</button>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ 'PLACE.NAME' | translate }}</th>
+          <th>{{ 'PLACE.LOCATION' | translate }}</th>
+          <th>{{ 'PLACE.DESCRIPTION' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let livingPlace of livingPlaces 
+        | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" 
+        [routerLink]="['/livingPlace', livingPlace.id]">
+          <td>{{ livingPlace.name }}</td>
+          <td>{{ livingPlace.location }}</td>
+          <td>{{ livingPlace.description.length > 50 ? (livingPlace.description | slice:0:50) + '...' : livingPlace.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': showAddLivingPlacePopup }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.ADD.PLACE' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeAddLivingPlacePopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="livingPlaceName">{{ 'PLACE.NAME' | translate }}:</label>
+              <input type="text" class="form-control" id="livingPlaceName" [(ngModel)]="newLivingPlace.name">
+            </div>
+            <div class="form-group">
+                <label for="livingPlaceLocation">{{ 'PLACE.LOCATION' | translate }}:</label>
+                <input type="text" class="form-control" id="livingPlaceLocation" [(ngModel)]="newLivingPlace.location">
+              </div>
+            <div class="form-group">
+              <label for="livingPlaceLivingSpace">{{ 'PLACE.VOLUME' | translate }}:</label>
+              <input type="number" class="form-control" id="livingPlaceLivingSpace" [(ngModel)]="newLivingPlace.livingSpace">
+            </div>
+            <div class="form-group">
+                <label for="livingPlaceDescription">{{ 'PLACE.DESCRIPTION' | translate }}:</label>
+                <textarea class="form-control" id="livingPlaceDescription" [(ngModel)]="newLivingPlace.description"></textarea>
+              </div>
+          </div>          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addLivingPlace()">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeAddLivingPlacePopup()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>

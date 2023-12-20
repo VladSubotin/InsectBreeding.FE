@@ -1,0 +1,50 @@
+<div class="container">
+    <h2>{{ 'FODDER.TITLEFORMANY' | translate }}</h2>
+    <button class="btn btn-primary" (click)="openAddFoodPopup()">{{ 'BUTTON.ADD' | translate }}</button>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ 'FODDER.NAME' | translate }}</th>
+          <th>{{ 'FODDER.DESCRIPTION' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fodder of fodders 
+        | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" 
+        [routerLink]="['/fodder', fodder.id]">
+          <td>{{ fodder.name }}</td>
+          <td>{{ fodder.description.length > 50 ? (fodder.description | slice:0:50) + '...' : fodder.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': showAddFoodPopup }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.ADD.FODDER' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeAddFoodPopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="foodName">{{ 'FODDER.NAME' | translate }}:</label>
+            <input type="text" class="form-control" id="foodName" [(ngModel)]="newFodder.name">
+          </div>
+          <div class="form-group">
+            <label for="foodDescription">{{ 'FODDER.DESCRIPTION' | translate }}:</label>
+            <textarea class="form-control" id="foodDescription" [(ngModel)]="newFodder.description"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addFood()">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeAddFoodPopup()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

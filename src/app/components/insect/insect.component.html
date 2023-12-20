@@ -1,0 +1,184 @@
+<div class="container">
+    <h3>{{ 'INSECT.TITLEFORSOME' | translate }}</h3>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ insect.name }}</h5>
+        <p class="card-text">{{ insect.description }}</p>
+        <h6 class="card-text">{{ 'INSECT.TEMPR' | translate }}: {{ insect.minTemperature }} - {{ insect.maxTemperature }}</h6>
+        <h6 class="card-text">{{ 'INSECT.HUM' | translate }}: {{ insect.minHumidity }} - {{ insect.maxHumidity }}</h6>
+        <h6 class="card-text">{{ 'INSECT.LIVINGSPACE' | translate }}: {{ insect.minLivingSpace }}</h6>
+        <h6 class="card-text">{{ 'INSECT.LIFESPAN' | translate }}: {{ insect.lifeSpan }}</h6>
+        <button class="btn btn-primary" (click)="confirmEdit()">{{ 'BUTTON.EDIT' | translate }}</button>
+        <button class="btn btn-danger" (click)="confirmDelete()">{{ 'BUTTON.DELETE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>{{ 'INSECTFODDER.TITLE' | translate }}</h2>
+    <button class="btn btn-primary" (click)="openAddInsectFodderPopup()">{{ 'BUTTON.ADD' | translate }}</button>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ 'INSECTFODDER.NAME' | translate }}</th>
+          <th>{{ 'INSECTFODDER.CONSAMPTIONVOLUME' | translate }}</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let insectFodder of insectFodders 
+        | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" >
+          <td [routerLink]="['/fodder', insectFodder.fodderId]">{{ insectFodder.fodderName }}</td>
+          <td [routerLink]="['/fodder', insectFodder.fodderId]">{{ insectFodder.fodderConsumptionVolume }}</td>
+          <td><button class="btn btn-primary" (click)="confirmIFEdit(insectFodder.insectId, insectFodder.fodderId)">{{ 'BUTTON.EDIT' | translate }}</button></td>
+          <td><button class="btn btn-danger" (click)="confirmIFDelete(insectFodder.insectId, insectFodder.fodderId)">{{ 'BUTTON.DELETE' | translate }}</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmDeleteModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.DELETE.DEFAULT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelDelete()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ 'ACTION.DELETE.INSECTFODDER' | translate }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelDelete()">{{ 'BUTTON.CANCEL' | translate }}</button>
+          <button type="button" class="btn btn-danger" (click)="deleteInsect()">{{ 'BUTTON.OK' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmEditModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.EDIT.INSECT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelEdit()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="insectName">{{ 'INSECT.NAME' | translate }}:</label>
+                <input type="text" class="form-control" id="insectName" [(ngModel)]="insect.name">
+              </div>
+              <div class="form-group">
+                <label for="minTemperature">{{ 'INSECT.MINTEMPR' | translate }}:</label>
+                <input type="number" class="form-control" id="minTemperature" [(ngModel)]="insect.minTemperature">
+              </div>
+              <div class="form-group">
+                <label for="maxTemperature">{{ 'INSECT.MAXTEMPR' | translate }}:</label>
+                <input type="number" class="form-control" id="maxTemperature" [(ngModel)]="insect.maxTemperature">
+              </div>
+              <div class="form-group">
+                <label for="minHumidity">{{ 'INSECT.MINHUM' | translate }}:</label>
+                <input type="number" class="form-control" id="minHumidity" [(ngModel)]="insect.minHumidity">
+              </div>
+              <div class="form-group">
+                <label for="maxHumidity">{{ 'INSECT.MAXHUM' | translate }}:</label>
+                <input type="number" class="form-control" id="maxHumidity" [(ngModel)]="insect.maxHumidity">
+              </div>
+              <div class="form-group">
+                <label for="minLivingSpace">{{ 'INSECT.LIVINGSPACE' | translate }}:</label>
+                <input type="number" class="form-control" id="minLivingSpace" [(ngModel)]="insect.minLivingSpace">
+              </div>
+              <div class="form-group">
+                <label for="lifeSpan">{{ 'INSECT.LIFESPAN' | translate }}:</label>
+                <input type="number" class="form-control" id="lifeSpan" [(ngModel)]="insect.lifeSpan">
+              </div>
+              <div class="form-group">
+                  <label for="insectDescription">{{ 'INSECT.DESCRIPTION' | translate }}:</label>
+                  <textarea class="form-control" id="insectDescription" [(ngModel)]="insect.description"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="editInsect()">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelEdit()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': showAddInsectFodderPopup }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.ADD.INSECTFODDER' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeAddInsectFodderPopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="insectName">{{ 'INSECTFODDER.NAME' | translate }}:</label>
+              <select class="form-control" id="insectName" [(ngModel)]="newInsectFodder.fodderId">
+                <option *ngFor="let fodder of fodders" [value]="fodder.id">{{ fodder.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="lifeSpan">{{ 'INSECTFODDER.CONSAMPTIONVOLUME' | translate }}:</label>
+              <input type="number" class="form-control" id="lifeSpan" [(ngModel)]="newInsectFodder.fodderConsumptionVolume">
+            </div>
+          </div>          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addInsectFodder()">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeAddInsectFodderPopup()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmIFDeleteModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.DELETE.DEFAULT' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelIFDelete()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ 'ACTION.DELETE.INSECTFODDER' | translate }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelIFDelete()">{{ 'BUTTON.CANCEL' | translate }}</button>
+          <button type="button" class="btn btn-danger" (click)="deleteInsectFodder(insectFodder.insectId, insectFodder.fodderId)">{{ 'BUTTON.DELETE' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ 'd-block': confirmIFEditModalVisible }">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTION.EDIT.INSECTFODDER' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelIFEdit()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+              <div class="form-group">
+                <label for="minTemperature">{{ 'INSECTFODDER.CONSAMPTIONVOLUME' | translate }}:</label>
+                <input type="number" class="form-control" id="minTemperature" [(ngModel)]="insectFodder.fodderConsumptionVolume">
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="editInsectFodder(insectFodder.insectId, insectFodder.fodderId)">{{ 'BUTTON.OK' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelIFEdit()">{{ 'BUTTON.CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>

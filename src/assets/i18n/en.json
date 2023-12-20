@@ -1,0 +1,151 @@
+{
+    "NAV": {
+        "PLACES": "Breeding Places",
+        "INSECTS": "Insects",
+        "FODDERS": "Feeds",
+        "PROFILE": "Profile",
+        "LOGOUT": "Logout",
+        "LOGIN": "Login"
+    },
+    "LOGIN": {
+        "TITLE": "Authorization",
+        "ACTION": "Log In",
+        "REDIRECT": "Don't have an account? Register."
+    },
+    "REGISTER": {
+        "TITLE": "Registration",
+        "ACTION": "Register",
+        "REDIRECT": "Already have an account? Log in."
+    },
+    "USER": {
+        "TITLE": "User Profile",
+        "EMAIL": "Email",
+        "FIRSTNAME": "First Name",
+        "LASTNAME": "Last Name",
+        "PASSWORD": "Password",
+        "EDITUSER": "Edit User Data",
+        "EDITPASSWORD": "Change Password",
+        "ENTERPASSWORD": "Enter Password",
+        "EDITPASSWORDTITLE": "Password Change",
+        "NEWPASSWORD": "New Password",
+        "OLDPASSWORD": "Old Password",
+        "DELETEUSER": "Delete Account"
+    },
+    "FODDER": {
+        "TITLEFORMANY": "Feeds",
+        "TITLEFORSOME": "Feed Information",
+        "NAME": "Name",
+        "DESCRIPTION": "Description"
+    },
+    "INSECT": {
+        "TITLEFORMANY": "Insects",
+        "TITLEFORSOME": "Insect Information",
+        "NAME": "Name",
+        "MINTEMPR": "Minimum Temperature",
+        "MAXTEMPR": "Maximum Temperature",
+        "TEMPR": "Required Temperature",
+        "MINHUM": "Minimum Humidity",
+        "MAXHUM": "Maximum Humidity",
+        "HUM": "Required Humidity",
+        "LIVINGSPACE": "Required Living Space",
+        "LIFESPAN": "Growth Period",
+        "DESCRIPTION": "Description"
+    },
+    "INSECTFODDER": {
+        "TITLE": "Insect Feeds",
+        "NAME": "Feed Name",
+        "CONSAMPTIONVOLUME": "Feed Consumption Volume per Day"
+    },
+    "PLACE": {
+        "TITLEFORMANY": "Breeding Places",
+        "TITLEFORSOME": "Breeding Place Information",
+        "NAME": "Name",
+        "LOCATION": "Location",
+        "VOLUME": "Space Volume in Place",
+        "TEMPR": "Temperature",
+        "HUM": "Humidity",
+        "UPDATETIME": "Last Temperature and Humidity Update Time",
+        "DESCRIPTION": "Description"
+    },
+    "PLACEINSECT": {
+        "TITLE": "Insects in Place",
+        "NAME": "Insect Name",
+        "INSECTCOUNT": "Number of Insects",
+        "SATTLEMENTTIME": "Settlement Date and Time"
+    },
+    "PLACEFODDER": {
+        "TITLE": "Feeds in Place",
+        "NAME": "Feed Name",
+        "FODDERCOUNT": "Number of Feeds"
+    },
+    "BUTTON": {
+        "ADD": "Add New",
+        "EDIT": "Edit",
+        "DELETE": "Delete",
+        "OK": "OK",
+        "CANCEL": "Cancel"
+    },
+    "ACTION": {
+        "ADD": {
+            "FODDER": "Add New Feed",
+            "INSECT": "Add New Insect",
+            "PLACE": "Add New Breeding Place",
+            "INSECTFODDER": "Add New Feed for Insect",
+            "PLACEINSECT": "Add New Insect to Place",
+            "PLACEFODDER": "Add New Feed to Place"
+        },
+        "EDIT": {
+            "FODDER": "Edit Feed Information",
+            "INSECT": "Edit Insect Information",
+            "PLACE": "Edit Breeding Place Information",
+            "INSECTFODDER": "Edit Feed Information for Insect",
+            "PLACEINSECT": "Edit Insect Information in Place",
+            "PLACEFODDER": "Edit Feed Information in Place"
+        },
+        "DELETE": {
+            "DEFAULT": "Confirm Deletion",
+            "USER": "Are you sure you want to delete the account? Deletion cannot be undone.",
+            "FODDER": "Are you sure you want to delete this feed? Deletion cannot be undone.",
+            "INSECT": "Are you sure you want to delete this insect? Deletion cannot be undone.",
+            "PLACE": "Are you sure you want to delete this breeding place? Deletion cannot be undone.",
+            "INSECTFODDER": "Are you sure you want to delete this feed for the insect? Deletion cannot be undone.",
+            "PLACEINSECT": "Are you sure you want to delete this insect from the place? Deletion cannot be undone.",
+            "PLACEFODDER": "Are you sure you want to delete this feed from the place? Deletion cannot be undone."
+        }
+    },
+    "WARNING": {
+        "TITLE": "Warning",
+        "NOTENOUGHVOLUME": {
+            "TITLE": "Insufficient space for insects in this place",
+            "REQUIREDVOLUME": "Volume of space required for all insects in this place"
+        },
+        "INAPPROPRIATETEMPR": {
+            "TITLE": "Temperature in this place is not suitable for this insect",
+            "REQUIREDTEMPR": "Required Temperature",
+            "CURTEMPR": "Temperature in the place"
+        },
+        "INAPPROPRIATEHUM": {
+            "TITLE": "Humidity in this place is not suitable for this insect",
+            "REQUIREDHUM": "Required Humidity",
+            "CURHUM": "Humidity in the place"
+        },
+        "INAPPROPRIATEFODDERS": {
+            "TITLE": "This place does not have the required feeds for this insect",
+            "FODDER": "Feed Name"
+        },
+        "LIVINGTIMEISUP": {
+            "TITLE": "The set duration for this insect in the place has expired",
+            "ACTUALTERM": "Insect has been in the place",
+            "REQUIREDTERM": "Duration of stay in the place",
+            "DAY": "days"
+        },
+        "NOTENOUGHFODDER": {
+            "TITLE": "Feed is running low",
+            "CONSAMPTIONVOLUME": "Amount of feed consumed by all insects in the place per day"
+        },
+        "INCORRECTPASSWORD": "Incorrect password",
+        "INCORRECTLOGIN": "Incorrect email or password",
+        "REGISTERDONE": "User registered",
+        "REGISTERWARD": "Email is already registered"
+    }
+}
